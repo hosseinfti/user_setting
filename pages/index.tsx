@@ -6,6 +6,7 @@ import {
   Collapse,
   SvgIconTypeMap,
   Link,
+  IconButton,
 } from "@mui/material";
 import { Box, Container } from "@mui/system";
 import MySelect from "../components/select/MySelect";
@@ -141,17 +142,21 @@ export default function Home() {
                 English
               </Button>
               {context?.theme === "dark" ? (
-                <DarkModeOutlinedIcon
-                  onClick={() => {
-                    context?.setTheme("light");
-                  }}
-                />
+                <IconButton>
+                  <DarkModeOutlinedIcon
+                    onClick={() => {
+                      context?.setTheme("light");
+                    }}
+                  />
+                </IconButton>
               ) : (
-                <LightModeIcon
-                  onClick={() => {
-                    context?.setTheme("dark");
-                  }}
-                />
+                <IconButton sx={{ color: "#000000" }}>
+                  <LightModeIcon
+                    onClick={() => {
+                      context?.setTheme("dark");
+                    }}
+                  />
+                </IconButton>
               )}
             </Box>
           </Box>
