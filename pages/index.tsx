@@ -256,8 +256,10 @@ export default function Home() {
                   onClick={() => {
                     if (collapseInfo) {
                       collapseInfo.id = String(new Date().valueOf());
-                      contacts.push(collapseInfo);
-                      setContacts([...contacts]);
+                      if (contacts) {
+                        contacts.push(collapseInfo);
+                        setContacts([...contacts]);
+                      }
                       handleCollapse(false);
                     }
                   }}
