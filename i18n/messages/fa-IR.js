@@ -23,5 +23,6 @@ export default {
     telegram: "تلگرام",
     linkedin: "لینکدین",
     website: "وب‌سایت",
+    
   },
 };

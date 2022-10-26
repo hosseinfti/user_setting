@@ -43,14 +43,7 @@ export interface selectType {
 
 export default function Home() {
   const context = useContext(userContext);
-  const [contacts, setContacts] = useState<Array<contactType | undefined>>([
-    {
-      id: "123",
-      type: "instagram",
-      link: "https://www.instagram.com",
-      icon: instagram,
-    },
-  ]);
+  const [contacts, setContacts] = useState<Array<contactType | undefined>>();
   const [isCollapse, setIsCollapse] = useState<boolean>(false);
   const [collapseInfo, setCollapseInfo] = useState<contactType | undefined>();
   const [valid, setValid] = useState<boolean>(false);
@@ -58,8 +51,22 @@ export default function Home() {
   const textFiledRef = useRef(null);
 
   useEffect(() => {
+    console.log("changed", contacts);
+
     setCollapseInfo(undefined);
+    let loadedContact = JSON.stringify(contacts);
+    if (loadedContact && loadedContact.length > 0) {
+      localStorage.setItem("contacts", loadedContact);
+    }
   }, [contacts]);
+
+  useEffect(() => {
+    let loadedContact = localStorage.getItem("contacts");
+    if (loadedContact && loadedContact.length > 0) {
+      setContacts(JSON.parse(loadedContact));
+      console.log(JSON.parse(loadedContact));
+    }
+  }, []);
 
   const handleCollapse = (bool: boolean) => {
     if (bool === false) {
@@ -151,7 +158,7 @@ export default function Home() {
           }}
         >
           <Typography sx={{ textAlign: "start" }} color={"text.secondary"}>
-            {translate("soacials")}
+            {translate("contacts")}
           </Typography>
           <Box sx={{ display: "flex", justifyContent: "start" }}>
             <Button
@@ -254,22 +261,23 @@ export default function Home() {
               </Box>
             </Box>
           </Collapse>
-          {contacts.map((contact, index) => {
-            return (
-              <ListItem
-                key={index}
-                contact={contact}
-                onDelete={() => {
-                  contacts.splice(index, 1);
-                  setContacts([...contacts]);
-                }}
-                onChange={(collapseInfo: contactType | undefined) => {
-                  contacts[index] = collapseInfo;
-                  setContacts([...contacts]);
-                }}
-              />
-            );
-          })}
+          {contacts &&
+            contacts.map((contact, index) => {
+              return (
+                <ListItem
+                  key={index}
+                  contact={contact}
+                  onDelete={() => {
+                    contacts.splice(index, 1);
+                    setContacts([...contacts]);
+                  }}
+                  onChange={(collapseInfo: contactType | undefined) => {
+                    contacts[index] = collapseInfo;
+                    setContacts([...contacts]);
+                  }}
+                />
+              );
+            })}
         </Box>
       </Box>
     </Container>

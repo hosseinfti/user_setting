@@ -95,16 +95,9 @@ function Select<T extends OptionValue>(props: Props<T>) {
         }
       }
       getOptionLabel={(option) => option.label || `${option.value}`}
-      renderOption={(props, option, { selected }) => {
+      renderOption={(props, option) => {
         return (
           <li value={option.value} {...props} key={`${option.value}`}>
-            {/* <Checkbox
-              style={{ marginRight: 8 }}
-              checked={selected}
-              id={`${option.value}`}
-            /> */}
-            {/* {option.icon}
-            <Image /> */}
             {option.icon && (
               <Box sx={{ marginRight: "1em" }}>
                 <option.icon />

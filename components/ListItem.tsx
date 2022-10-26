@@ -65,8 +65,8 @@ const ListItem = (props: PropType) => {
               flexWrap: "wrap",
             }}
           >
-            <Box>photo</Box>
-            <Typography>{contact?.type}</Typography>
+            {/* <Box>{contact && contact.icon && <contact.icon />}</Box> */}
+            <Typography>{translate(contact?.type)}</Typography>
             <Typography> {translate("link")} : </Typography>
           </Box>
           <Typography>
