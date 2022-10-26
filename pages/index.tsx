@@ -51,8 +51,6 @@ export default function Home() {
   const textFiledRef = useRef(null);
 
   useEffect(() => {
-    console.log("changed", contacts);
-
     setCollapseInfo(undefined);
     let loadedContact = JSON.stringify(contacts);
     if (loadedContact && loadedContact.length > 0) {
@@ -64,7 +62,6 @@ export default function Home() {
     let loadedContact = localStorage.getItem("contacts");
     if (loadedContact && loadedContact.length > 0) {
       setContacts(JSON.parse(loadedContact));
-      console.log(JSON.parse(loadedContact));
     }
   }, []);
 
