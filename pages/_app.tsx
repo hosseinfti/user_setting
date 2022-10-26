@@ -18,11 +18,14 @@ interface AppContextInterface {
 }
 export const userContext = createContext<AppContextInterface | null>(null);
 
-function MyApp({
-  Component,
-  emotionCache = clientSideEmotionCache,
-  pageProps,
-}) {
+interface Props {
+  Component: any;
+  emotionCache: any;
+  pageProps: any;
+}
+
+function MyApp(props: Props) {
+  const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
   const [locale, setLocale] = useState<string>(LOCALES.PERSIAN);
   const [theme, setTheme] = useState<string>("light");
 
