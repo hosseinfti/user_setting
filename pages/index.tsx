@@ -16,6 +16,7 @@ import twitter from "@mui/icons-material/Twitter";
 import website from "@mui/icons-material/Public";
 import facebook from "@mui/icons-material/Facebook";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
+import LightModeIcon from "@mui/icons-material/LightMode";
 import { OverridableComponent } from "@mui/material/OverridableComponent";
 import ListItem from "../components/ListItem";
 import translate from "../i18n/translate";
@@ -139,7 +140,19 @@ export default function Home() {
               >
                 English
               </Button>
-              <DarkModeOutlinedIcon />
+              {context?.theme === "dark" ? (
+                <DarkModeOutlinedIcon
+                  onClick={() => {
+                    context?.setTheme("light");
+                  }}
+                />
+              ) : (
+                <LightModeIcon
+                  onClick={() => {
+                    context?.setTheme("dark");
+                  }}
+                />
+              )}
             </Box>
           </Box>
         </Box>

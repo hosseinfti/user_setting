@@ -1,6 +1,6 @@
 import "../styles/globals.css";
 import { ThemeProvider } from "@mui/material";
-import { darkTheme } from "../utils/theme";
+import { darkTheme, lightTheme } from "../utils/theme";
 import createEmotionCache from "../utils/createEmotionCache";
 import { CacheProvider } from "@emotion/react";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -8,9 +8,13 @@ import { I18nProvider, LOCALES } from "../i18n";
 import React, { useEffect, useState, createContext } from "react";
 
 const clientSideEmotionCache = createEmotionCache();
+
+const myTheme: any = { dark: darkTheme, light: lightTheme };
 interface AppContextInterface {
   locale: string;
   setLocale: (e: string) => void;
+  theme: any;
+  setTheme: (e: string) => void;
 }
 export const userContext = createContext<AppContextInterface | null>(null);
 
@@ -20,6 +24,7 @@ function MyApp({
   pageProps,
 }) {
   const [locale, setLocale] = useState<string>(LOCALES.PERSIAN);
+  const [theme, setTheme] = useState<string>("light");
 
   useEffect(() => {
     let currentLang = localStorage.getItem("lang");
@@ -35,10 +40,13 @@ function MyApp({
   const handleLocale = (e: string) => {
     setLocale(e);
   };
+  const handleTheme = (e: string) => {
+    setTheme(e);
+  };
 
   return (
     <CacheProvider value={emotionCache}>
-      <ThemeProvider theme={darkTheme}>
+      <ThemeProvider theme={myTheme[theme]}>
         <CssBaseline />
         <I18nProvider locale={locale}>
           <userContext.Provider
@@ -46,6 +54,10 @@ function MyApp({
               locale,
               setLocale: (e) => {
                 handleLocale(e);
+              },
+              theme,
+              setTheme: (e) => {
+                handleTheme(e);
               },
             }}
           >
