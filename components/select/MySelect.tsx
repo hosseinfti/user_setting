@@ -6,6 +6,7 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import { OverridableComponent } from "@mui/material/OverridableComponent";
 import { Box } from "@mui/system";
+import translate from "../../i18n/translate";
 
 type OptionValue = string | number | readonly string[] | undefined;
 
@@ -58,7 +59,7 @@ function Select<T extends OptionValue>(props: Props<T>) {
     <Autocomplete<Option<T>>
       className={"MyAutoComplete"}
       onChange={(e: any, newValue) => {
-        if (newValue) {
+        if (newValue && newValue.value) {
           handleChangeValue(newValue.value);
         }
       }}
@@ -109,7 +110,7 @@ function Select<T extends OptionValue>(props: Props<T>) {
                 <option.icon />
               </Box>
             )}
-            {option.label || `${option.value}`}
+            {translate(option.label) || `${translate(option.value)}`}
           </li>
         );
       }}
@@ -117,7 +118,7 @@ function Select<T extends OptionValue>(props: Props<T>) {
         return (
           <TextField
             required={required}
-            helperText={helperText}
+            helperText={translate(helperText)}
             value={value}
             {...params}
             InputProps={{
@@ -139,8 +140,8 @@ function Select<T extends OptionValue>(props: Props<T>) {
                 </InputAdornment>
               ),
             }}
-            placeholder={placeholder}
-            label={label}
+            placeholder={`${translate(placeholder)}`}
+            label={translate(label)}
           />
         );
       }}

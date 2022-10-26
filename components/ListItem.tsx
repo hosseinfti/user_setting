@@ -1,39 +1,29 @@
 import { Box, Button, Collapse, TextField, Typography } from "@mui/material";
 import React, { useRef, useState } from "react";
-import { contactType, selectType } from "../pages";
+import { contactType, platforms, selectType } from "../pages";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import telegram from "@mui/icons-material/Telegram";
-import linkedIn from "@mui/icons-material/LinkedIn";
-import instagram from "@mui/icons-material/Instagram";
-import twitter from "@mui/icons-material/Twitter";
-import website from "@mui/icons-material/Public";
-import facebook from "@mui/icons-material/Facebook";
 import MySelect from "../components/select/MySelect";
 import ConfirmButton from "./confirmButton/ConfirmButton";
+import translate from "../i18n/translate";
 
 interface PropType {
-  contact: contactType;
+  contact: contactType | undefined;
   onDelete: () => void;
-  onChange: (collapseInfo: contactType) => void;
+  onChange: (collapseInfo: contactType | undefined) => void;
 }
 
 const ListItem = (props: PropType) => {
   const { contact, onDelete, onChange } = props;
 
-  const [collapseInfo, setCollapseInfo] = useState<contactType>(contact);
+  const [collapseInfo, setCollapseInfo] = useState<contactType | undefined>(
+    contact
+  );
   const [isCollapse, setIsCollapse] = useState<boolean>(false);
   const [valid, setValid] = useState<boolean>(false);
-  const platforms: selectType[] = [
-    { value: "twitter", label: "توییتر", icon: twitter },
-    { value: "instagram", label: "اینستاگرام", icon: instagram },
-    { value: "facebook", label: "فیسبوک", icon: facebook },
-    { value: "telegram", label: "تلگرام", icon: telegram },
-    { value: "linkedin", label: "لینکدین", icon: linkedIn },
-    { value: "website", label: "وب‌سایت", icon: website },
-  ];
-  const textFiledRef = useRef();
-  const handleValidate = (e) => {
+
+  const textFiledRef = useRef(null);
+  const handleValidate = (e: any) => {
     const reg = new RegExp(`(www|http:|https:)+[^\s]+[\w]`);
     setValid(reg.test(e.target.value));
   };
@@ -76,11 +66,11 @@ const ListItem = (props: PropType) => {
             }}
           >
             <Box>photo</Box>
-            <Typography>{contact.type}</Typography>
-            <Typography> لینک : </Typography>
+            <Typography>{contact?.type}</Typography>
+            <Typography> {translate("link")} : </Typography>
           </Box>
           <Typography>
-            <a href={contact.link}>{contact.link}</a>
+            <a href={contact?.link}>{contact?.link}</a>
           </Typography>
         </Box>
         <Box
@@ -99,7 +89,7 @@ const ListItem = (props: PropType) => {
           >
             <EditIcon />
             <Typography sx={{ display: { xs: "none", sm: "inline-block" } }}>
-              ویرایش
+              {translate("edit")}
             </Typography>
           </Button>
           <ConfirmButton
@@ -110,11 +100,13 @@ const ListItem = (props: PropType) => {
                 <Typography
                   sx={{ display: { xs: "none", sm: "inline-block" } }}
                 >
-                  حذف
+                  {translate("delete")}
                 </Typography>
               </Button>
             }
-            description={"آیا از حذف این مورد مطئن هستید؟"}
+            description={`${translate("sure_to_delet.item", {
+              item: "this_item",
+            })}`}
           />
         </Box>
       </Box>
@@ -133,14 +125,13 @@ const ListItem = (props: PropType) => {
               sx={{
                 display: "flex",
                 flexDirection: { xs: "column", sm: "row" },
-
                 gap: "1em",
               }}
             >
               <MySelect
                 required
-                helperText="این فیلد اجباری است"
-                label={"نوع"}
+                helperText={"required_field"}
+                label={"type"}
                 sx={{ flex: { sm: 1 } }}
                 onChange={(value) => {
                   setCollapseInfo({
@@ -163,13 +154,13 @@ const ListItem = (props: PropType) => {
                   });
                 }}
                 sx={{ flex: { sm: 3 }, direction: "rtl" }}
-                label={"لینک"}
+                label={translate("link")}
                 required
                 error={!valid}
                 helperText={
                   textFiledRef.current
-                    ? "محتوای وارد شده باید از جنس آدرس اینترنتی باشد"
-                    : "این فیلد الزامی است"
+                    ? translate("should_url")
+                    : translate("required_field")
                 }
               />
             </Box>
@@ -187,7 +178,7 @@ const ListItem = (props: PropType) => {
                   setIsCollapse(false);
                 }}
               >
-                انصراف
+                {translate("cancel")}
               </Button>
               <Button
                 onClick={() => {
@@ -197,7 +188,7 @@ const ListItem = (props: PropType) => {
                 disabled={!collapseInfo?.type || !collapseInfo?.link || !valid}
                 variant="contained"
               >
-                ویرایش راه ارتباطی
+                {translate("edit_contact")}
               </Button>
             </Box>
           </Box>

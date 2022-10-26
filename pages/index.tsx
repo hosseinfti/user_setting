@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import {
   Button,
   TextField,
@@ -18,9 +18,19 @@ import facebook from "@mui/icons-material/Facebook";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import { OverridableComponent } from "@mui/material/OverridableComponent";
 import ListItem from "../components/ListItem";
+import translate from "../i18n/translate";
+import { userContext } from "./_app";
 
+export const platforms: selectType[] = [
+  { value: "twitter", label: "twitter", icon: twitter },
+  { value: "instagram", label: "instagram", icon: instagram },
+  { value: "facebook", label: "facebook", icon: facebook },
+  { value: "telegram", label: "telegram", icon: telegram },
+  { value: "linkedin", label: "linkedin", icon: linkedIn },
+  { value: "website", label: "website", icon: website },
+];
 export interface contactType {
-  id: string;
+  id?: string;
   type?: string;
   link?: string;
   icon?: OverridableComponent<SvgIconTypeMap<{}, "svg">>;
@@ -32,7 +42,8 @@ export interface selectType {
 }
 
 export default function Home() {
-  const [contacts, setContacts] = useState<Array<contactType>>([
+  const context = useContext(userContext);
+  const [contacts, setContacts] = useState<Array<contactType | undefined>>([
     {
       id: "123",
       type: "instagram",
@@ -43,16 +54,8 @@ export default function Home() {
   const [isCollapse, setIsCollapse] = useState<boolean>(false);
   const [collapseInfo, setCollapseInfo] = useState<contactType | undefined>();
   const [valid, setValid] = useState<boolean>(false);
-  const platforms: selectType[] = [
-    { value: "twitter", label: "توییتر", icon: twitter },
-    { value: "instagram", label: "اینستاگرام", icon: instagram },
-    { value: "facebook", label: "فیسبوک", icon: facebook },
-    { value: "telegram", label: "تلگرام", icon: telegram },
-    { value: "linkedin", label: "لینکدین", icon: linkedIn },
-    { value: "website", label: "وب‌سایت", icon: website },
-  ];
 
-  const textFiledRef = useRef();
+  const textFiledRef = useRef(null);
 
   useEffect(() => {
     setCollapseInfo(undefined);
@@ -66,7 +69,7 @@ export default function Home() {
       }, 1000);
     }
   };
-  const handleValidate = (e) => {
+  const handleValidate = (e: any) => {
     const reg = new RegExp(`(www|http:|https:)+[^\s]+[\w]`);
     setValid(reg.test(e.target.value));
   };
@@ -92,16 +95,16 @@ export default function Home() {
           }}
         >
           <Box sx={{ flex: 1 }}>
-            <Typography variant="h5">تنظیمات کاربری</Typography>
+            <Typography variant="h5">{translate("user_setting")}</Typography>
             <Box sx={{ display: "flex", gap: "1em", marginTop: "3em" }}>
               <Link sx={{ textDecoration: "none" }}>
-                <Typography>خانه</Typography>
+                <Typography>{translate("home")}</Typography>
               </Link>
               <Link sx={{ textDecoration: "none" }}>
-                <Typography>کاربر</Typography>
+                <Typography>{translate("user")}</Typography>
               </Link>
               <Link sx={{ textDecoration: "none" }}>
-                <Typography>تنظیمات کاربری</Typography>
+                <Typography>{translate("user_setting")}</Typography>
               </Link>
             </Box>
           </Box>
@@ -114,8 +117,24 @@ export default function Home() {
                 gap: "1em",
               }}
             >
-              <Button>فارسی</Button>
-              <Button>English</Button>
+              <Button
+                onClick={() => {
+                  context?.setLocale("fa-ir");
+                  document.body.style.direction = "rtl";
+                }}
+                variant={context?.locale === "fa-ir" ? "contained" : "outlined"}
+              >
+                فارسی
+              </Button>
+              <Button
+                onClick={() => {
+                  context?.setLocale("en-us");
+                  document.body.style.direction = "ltr";
+                }}
+                variant={context?.locale === "en-us" ? "contained" : "outlined"}
+              >
+                English
+              </Button>
               <DarkModeOutlinedIcon />
             </Box>
           </Box>
@@ -132,7 +151,7 @@ export default function Home() {
           }}
         >
           <Typography sx={{ textAlign: "start" }} color={"text.secondary"}>
-            مسیر های ارتباطی
+            {translate("soacials")}
           </Typography>
           <Box sx={{ display: "flex", justifyContent: "start" }}>
             <Button
@@ -141,7 +160,7 @@ export default function Home() {
               }}
               sx={{ marginBlock: "1em" }}
             >
-              افزودن مسیر ارتباطی
+              {translate("add_contact")}
             </Button>
           </Box>
           <Collapse in={isCollapse} timeout="auto" unmountOnExit>
@@ -165,8 +184,8 @@ export default function Home() {
               >
                 <MySelect
                   required
-                  helperText="این فیلد اجباری است"
-                  label={"نوع"}
+                  helperText={"required_field"}
+                  label={"type"}
                   sx={{ flex: { sm: 1 } }}
                   onChange={(value) => {
                     setCollapseInfo({
@@ -189,13 +208,13 @@ export default function Home() {
                     });
                   }}
                   sx={{ flex: { sm: 3 }, direction: "rtl" }}
-                  label={"لینک"}
+                  label={translate("link")}
                   required
                   error={!valid}
                   helperText={
                     textFiledRef.current
-                      ? "محتوای وارد شده باید از جنس آدرس اینترنتی باشد"
-                      : "این فیلد الزامی است"
+                      ? translate("should_url")
+                      : translate("required_field")
                   }
                 />
               </Box>
@@ -214,21 +233,23 @@ export default function Home() {
                     setCollapseInfo(undefined);
                   }}
                 >
-                  انصراف
+                  {translate("cancel")}
                 </Button>
                 <Button
                   onClick={() => {
-                    collapseInfo.id = String(new Date().valueOf());
-                    contacts.push(collapseInfo);
-                    setContacts([...contacts]);
-                    handleCollapse(false);
+                    if (collapseInfo) {
+                      collapseInfo.id = String(new Date().valueOf());
+                      contacts.push(collapseInfo);
+                      setContacts([...contacts]);
+                      handleCollapse(false);
+                    }
                   }}
                   disabled={
                     !collapseInfo?.type || !collapseInfo?.link || !valid
                   }
                   variant="contained"
                 >
-                  ثبت راه ارتباطی
+                  {translate("submit_contact")}
                 </Button>
               </Box>
             </Box>
@@ -242,7 +263,7 @@ export default function Home() {
                   contacts.splice(index, 1);
                   setContacts([...contacts]);
                 }}
-                onChange={(collapseInfo: contactType) => {
+                onChange={(collapseInfo: contactType | undefined) => {
                   contacts[index] = collapseInfo;
                   setContacts([...contacts]);
                 }}
