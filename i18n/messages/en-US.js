@@ -24,5 +24,6 @@ export default {
     telegram: "telegram",
     linkedin: "linkedin",
     website: "website",
+    return: "Return",
   },
 };
