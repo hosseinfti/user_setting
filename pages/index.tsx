@@ -20,6 +20,7 @@ import ListItem from "../components/ListItem";
 import translate from "../i18n/translate";
 import { userContext } from "./_app";
 import MyCollapse from "../components/collapse/MyCollapse";
+import SearchInput from "../components/search/SearchInput";
 
 export const platforms: selectType[] = [
   { value: "twitter", label: "twitter", icon: twitter },
@@ -45,6 +46,7 @@ export default function Home() {
   const context = useContext(userContext);
   const [contacts, setContacts] = useState<Array<contactType | undefined>>();
   const [isCollapse, setIsCollapse] = useState<boolean>(false);
+  const [searchedText, setSearchedText] = useState<string | undefined>();
 
   useEffect(() => {
     let loadedContact = JSON.stringify(contacts);
@@ -152,6 +154,10 @@ export default function Home() {
             flexDirection: "column",
           }}
         >
+          <SearchInput
+            value={searchedText}
+            onChange={(value: string) => setSearchedText(value)}
+          />
           <Typography sx={{ textAlign: "start" }} color={"text.secondary"}>
             {translate("contacts")}
           </Typography>
@@ -181,22 +187,33 @@ export default function Home() {
             }}
           />
           {contacts &&
-            contacts.map((contact, index) => {
-              return (
-                <ListItem
-                  key={index}
-                  contact={contact}
-                  onDelete={() => {
-                    contacts.splice(index, 1);
-                    setContacts([...contacts]);
-                  }}
-                  onChange={(collapseInfo: contactType | undefined) => {
-                    contacts[index] = collapseInfo;
-                    setContacts([...contacts]);
-                  }}
-                />
-              );
-            })}
+            contacts
+              .filter((filtered) => {
+                if (searchedText) {
+                  return (
+                    filtered?.link?.includes(searchedText) ||
+                    filtered?.type?.includes(searchedText)
+                  );
+                } else {
+                  return contacts;
+                }
+              })
+              .map((contact, index) => {
+                return (
+                  <ListItem
+                    key={index}
+                    contact={contact}
+                    onDelete={() => {
+                      contacts.splice(index, 1);
+                      setContacts([...contacts]);
+                    }}
+                    onChange={(collapseInfo: contactType | undefined) => {
+                      contacts[index] = collapseInfo;
+                      setContacts([...contacts]);
+                    }}
+                  />
+                );
+              })}
         </Box>
       </Box>
     </Container>
