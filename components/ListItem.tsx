@@ -1,4 +1,4 @@
-import { Box, Button, SvgIcon, Typography } from "@mui/material";
+import { Box, Button, Link, SvgIcon, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { contactType, platforms, selectType } from "../pages";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -77,9 +77,12 @@ const ListItem = (props: PropType) => {
             )}
             <Typography> {translate("link")} : </Typography>
           </Box>
-          <Typography sx={{ flex: 3, textAlign: "right" }}>
-            <a href={contact?.link}>{contact?.link}</a>
-          </Typography>
+          <Link
+            sx={{ flex: 3, textAlign: "right", textDecoration: "none" }}
+            href={contact?.link}
+          >
+            <Typography sx={{ marginTop: "0.5em" }}>{contact?.link}</Typography>
+          </Link>
         </Box>
         <Box
           sx={{
