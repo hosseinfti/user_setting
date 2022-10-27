@@ -10,7 +10,7 @@ import React, { useEffect, useState, createContext } from "react";
 const clientSideEmotionCache = createEmotionCache();
 
 const myTheme: any = { dark: darkTheme, light: lightTheme };
-interface AppContextInterface {
+export interface AppContextInterface {
   locale: string;
   setLocale: (e: string) => void;
   theme: any;

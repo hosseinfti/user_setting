@@ -1,9 +1,10 @@
 import { Button, Collapse, TextField } from "@mui/material";
 import { Box } from "@mui/system";
 import MySelect from "../select/MySelect";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { contactType, platforms } from "../../pages";
 import translate from "../../i18n/translate";
+import { AppContextInterface, userContext } from "../../pages/_app";
 
 interface Props {
   defaultData?: contactType | undefined;
@@ -13,6 +14,7 @@ interface Props {
 }
 
 const MyCollapse = (props: Props) => {
+  const context: AppContextInterface | null = useContext(userContext);
   const { isOpen, setIsOpen, onChange, defaultData } = props;
   const [collapseInfo, setCollapseInfo] = useState<contactType | undefined>(
     defaultData
@@ -93,7 +95,7 @@ const MyCollapse = (props: Props) => {
         <Box
           sx={{
             display: "flex",
-            justifyContent: "end",
+            justifyContent: context?.locale === "fa-ir" ? "end" : "start",
             marginTop: "1em",
             gap: "0.5em",
           }}

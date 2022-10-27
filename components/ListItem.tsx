@@ -1,9 +1,4 @@
-import {
-  Box,
-  Button,
-  SvgIcon,
-  Typography,
-} from "@mui/material";
+import { Box, Button, SvgIcon, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { contactType, platforms, selectType } from "../pages";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -36,7 +31,6 @@ interface PropType {
 const ListItem = (props: PropType) => {
   const { contact, onDelete, onChange } = props;
   const [isCollapse, setIsCollapse] = useState<boolean>(false);
-  let platform;
   return (
     <Box
       sx={{
@@ -72,6 +66,7 @@ const ListItem = (props: PropType) => {
               alignItems: "center",
               gap: "0.5em",
               flexWrap: "wrap",
+              flex: 1,
             }}
           >
             {contact && contact.type && (
@@ -82,7 +77,7 @@ const ListItem = (props: PropType) => {
             )}
             <Typography> {translate("link")} : </Typography>
           </Box>
-          <Typography>
+          <Typography sx={{ flex: 3, textAlign: "right" }}>
             <a href={contact?.link}>{contact?.link}</a>
           </Typography>
         </Box>
