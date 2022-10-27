@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import {
   Button,
   Typography,
-  SvgIconTypeMap,
   Link,
   IconButton,
 } from "@mui/material";
@@ -15,7 +14,6 @@ import website from "@mui/icons-material/Public";
 import facebook from "@mui/icons-material/Facebook";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import LightModeIcon from "@mui/icons-material/LightMode";
-import { OverridableComponent } from "@mui/material/OverridableComponent";
 import ListItem from "../components/ListItem";
 import translate from "../i18n/translate";
 import { userContext } from "./_app";

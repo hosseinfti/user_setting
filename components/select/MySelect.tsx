@@ -5,11 +5,9 @@ import {
   IconButton,
   InputAdornment,
   SvgIcon,
-  SvgIconTypeMap,
 } from "@mui/material";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
-import { OverridableComponent } from "@mui/material/OverridableComponent";
 import { Box } from "@mui/system";
 import translate from "../../i18n/translate";
 
