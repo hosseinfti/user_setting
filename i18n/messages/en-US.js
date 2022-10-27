@@ -25,5 +25,6 @@ export default {
     linkedin: "linkedin",
     website: "website",
     return: "Return",
+    all: "all",
   },
 };

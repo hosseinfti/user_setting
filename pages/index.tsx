@@ -21,6 +21,7 @@ import translate from "../i18n/translate";
 import { userContext } from "./_app";
 import MyCollapse from "../components/collapse/MyCollapse";
 import SearchInput from "../components/search/SearchInput";
+import Tab from "../components/tab/Tab";
 
 export const platforms: selectType[] = [
   { value: "twitter", label: "twitter", icon: twitter },
@@ -47,6 +48,7 @@ export default function Home() {
   const [contacts, setContacts] = useState<Array<contactType | undefined>>();
   const [isCollapse, setIsCollapse] = useState<boolean>(false);
   const [searchedText, setSearchedText] = useState<string | undefined>();
+  const [filteredType, setFilteredType] = useState<string>("all");
 
   useEffect(() => {
     let loadedContact = JSON.stringify(contacts);
@@ -63,7 +65,7 @@ export default function Home() {
   }, []);
 
   return (
-    <Container maxWidth="lg" sx={{ display: "flex", justifyContent: "center" }}>
+    <Container fixed sx={{ display: "flex", justifyContent: "center" }}>
       <Box
         component="div"
         sx={{
@@ -102,6 +104,7 @@ export default function Home() {
                 display: "flex",
                 justifyContent: "end",
                 alignItems: "center",
+                flexWrap: "wrap",
                 gap: "1em",
               }}
             >
@@ -142,6 +145,26 @@ export default function Home() {
               )}
             </Box>
           </Box>
+        </Box>
+        <Typography
+          sx={{ width: "100%", display: "flex", justifyContent: "start" }}
+        >
+          فیلتر بر اساس نوع
+        </Typography>
+        <Box
+          sx={{
+            width: "100%",
+            marginBlock: "1em",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <Tab
+            active={filteredType}
+            onclick={(value) => {
+              setFilteredType(value);
+            }}
+          />
         </Box>
         <Box
           component="div"
@@ -188,6 +211,13 @@ export default function Home() {
           />
           {contacts &&
             contacts
+              .filter((category) => {
+                if (filteredType !== "all") {
+                  return category?.type === filteredType;
+                } else {
+                  return contacts;
+                }
+              })
               .filter((filtered) => {
                 if (searchedText) {
                   return (

@@ -24,5 +24,6 @@ export default {
     linkedin: "لینکدین",
     website: "وب‌سایت",
     return: "بازگشت",
+    all: "همه"
   },
 };
