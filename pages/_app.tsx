@@ -27,7 +27,7 @@ interface Props {
 function MyApp(props: Props) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
   const [locale, setLocale] = useState<string>(LOCALES.PERSIAN);
-  const [theme, setTheme] = useState<string>("light");
+  const [theme, setTheme] = useState<string>("dark");
 
   useEffect(() => {
     let currentLang = localStorage.getItem("lang");

@@ -1,15 +1,12 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Button,
-  TextField,
   Typography,
-  Collapse,
   SvgIconTypeMap,
   Link,
   IconButton,
 } from "@mui/material";
 import { Box, Container } from "@mui/system";
-import MySelect from "../components/select/MySelect";
 import telegram from "@mui/icons-material/Telegram";
 import linkedIn from "@mui/icons-material/LinkedIn";
 import instagram from "@mui/icons-material/Instagram";
@@ -22,6 +19,7 @@ import { OverridableComponent } from "@mui/material/OverridableComponent";
 import ListItem from "../components/ListItem";
 import translate from "../i18n/translate";
 import { userContext } from "./_app";
+import MyCollapse from "../components/collapse/MyCollapse";
 
 export const platforms: selectType[] = [
   { value: "twitter", label: "twitter", icon: twitter },
@@ -47,13 +45,8 @@ export default function Home() {
   const context = useContext(userContext);
   const [contacts, setContacts] = useState<Array<contactType | undefined>>();
   const [isCollapse, setIsCollapse] = useState<boolean>(false);
-  const [collapseInfo, setCollapseInfo] = useState<contactType | undefined>();
-  const [valid, setValid] = useState<boolean>(false);
-
-  const textFiledRef = useRef(null);
 
   useEffect(() => {
-    setCollapseInfo(undefined);
     let loadedContact = JSON.stringify(contacts);
     if (loadedContact && loadedContact.length > 0) {
       localStorage.setItem("contacts", loadedContact);
@@ -66,19 +59,6 @@ export default function Home() {
       setContacts(JSON.parse(loadedContact));
     }
   }, []);
-
-  const handleCollapse = (bool: boolean) => {
-    if (bool === false) {
-      setCollapseInfo(undefined);
-      setTimeout(() => {
-        setIsCollapse(false);
-      }, 1000);
-    }
-  };
-  const handleValidate = (e: any) => {
-    const reg = new RegExp(`(www|http:|https:)+[^\s]+[\w]`);
-    setValid(reg.test(e.target.value));
-  };
 
   return (
     <Container maxWidth="lg" sx={{ display: "flex", justifyContent: "center" }}>
@@ -185,99 +165,21 @@ export default function Home() {
               {translate("add_contact")}
             </Button>
           </Box>
-          <Collapse in={isCollapse} timeout="auto" unmountOnExit>
-            <Box
-              sx={{
-                width: "100%",
-                padding: "1.5em",
-                backgroundColor: "grey.100",
-                borderRadius: "1em",
-                marginBottom: "1em",
-              }}
-            >
-              <Box
-                component="div"
-                sx={{
-                  display: "flex",
-                  flexDirection: { xs: "column", sm: "row" },
-
-                  gap: "1em",
-                }}
-              >
-                <MySelect
-                  required
-                  helperText={"required_field"}
-                  label={"type"}
-                  sx={{ flex: { sm: 1 } }}
-                  onChange={(value) => {
-                    setCollapseInfo({
-                      ...collapseInfo,
-                      type: value,
-                    });
-                  }}
-                  options={platforms}
-                  id={"taggingType"}
-                  value={collapseInfo && collapseInfo?.type}
-                />
-                <TextField
-                  ref={textFiledRef}
-                  value={collapseInfo?.link}
-                  onChange={(e) => {
-                    handleValidate(e);
-                    setCollapseInfo({
-                      ...collapseInfo,
-                      link: e.target.value,
-                    });
-                  }}
-                  sx={{ flex: { sm: 3 }, direction: "rtl" }}
-                  label={translate("link")}
-                  required
-                  error={!valid}
-                  helperText={
-                    textFiledRef.current
-                      ? translate("should_url")
-                      : translate("required_field")
-                  }
-                />
-              </Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "end",
-                  marginTop: "1em",
-                  gap: "0.5em",
-                }}
-              >
-                <Button
-                  variant="outlined"
-                  onClick={() => {
-                    setIsCollapse(false);
-                    setCollapseInfo(undefined);
-                  }}
-                >
-                  {translate("cancel")}
-                </Button>
-                <Button
-                  onClick={() => {
-                    if (collapseInfo) {
-                      collapseInfo.id = String(new Date().valueOf());
-                      if (contacts) {
-                        contacts.push(collapseInfo);
-                        setContacts([...contacts]);
-                      }
-                      handleCollapse(false);
-                    }
-                  }}
-                  disabled={
-                    !collapseInfo?.type || !collapseInfo?.link || !valid
-                  }
-                  variant="contained"
-                >
-                  {translate("submit_contact")}
-                </Button>
-              </Box>
-            </Box>
-          </Collapse>
+          <MyCollapse
+            setIsOpen={(bool) => {
+              setIsCollapse(bool);
+            }}
+            isOpen={isCollapse}
+            onChange={(collapseInfo) => {
+              if (collapseInfo) {
+                collapseInfo.id = String(new Date().valueOf());
+                if (contacts) {
+                  contacts.push(collapseInfo);
+                  setContacts([...contacts]);
+                }
+              }
+            }}
+          />
           {contacts &&
             contacts.map((contact, index) => {
               return (
