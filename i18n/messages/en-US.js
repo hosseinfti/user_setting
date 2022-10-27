@@ -26,5 +26,6 @@ export default {
     website: "website",
     return: "Return",
     all: "all",
+    filteredBy: "Filter By",
   },
 };

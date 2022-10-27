@@ -149,7 +149,7 @@ export default function Home() {
         <Typography
           sx={{ width: "100%", display: "flex", justifyContent: "start" }}
         >
-          فیلتر بر اساس نوع
+          {translate("filteredBy")}
         </Typography>
         <Box
           sx={{

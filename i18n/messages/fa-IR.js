@@ -24,6 +24,7 @@ export default {
     linkedin: "لینکدین",
     website: "وب‌سایت",
     return: "بازگشت",
-    all: "همه"
+    all: "همه",
+    filteredBy: "فیلتر بر اساس نوع",
   },
 };
