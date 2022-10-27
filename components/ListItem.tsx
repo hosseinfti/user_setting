@@ -1,4 +1,11 @@
-import { Box, Button, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Icon,
+  IconButton,
+  SvgIcon,
+  Typography,
+} from "@mui/material";
 import React, { useState } from "react";
 import { contactType, platforms, selectType } from "../pages";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -6,6 +13,21 @@ import EditIcon from "@mui/icons-material/Edit";
 import ConfirmButton from "./confirmButton/ConfirmButton";
 import translate from "../i18n/translate";
 import MyCollapse from "./collapse/MyCollapse";
+import telegram from "@mui/icons-material/Telegram";
+import linkedIn from "@mui/icons-material/LinkedIn";
+import instagram from "@mui/icons-material/Instagram";
+import twitter from "@mui/icons-material/Twitter";
+import website from "@mui/icons-material/Public";
+import facebook from "@mui/icons-material/Facebook";
+
+const platformIcon: any = {
+  telegram: telegram,
+  linkedIn: linkedIn,
+  instagram: instagram,
+  twitter: twitter,
+  website: website,
+  facebook: facebook,
+};
 
 interface PropType {
   contact: contactType | undefined;
@@ -16,6 +38,7 @@ interface PropType {
 const ListItem = (props: PropType) => {
   const { contact, onDelete, onChange } = props;
   const [isCollapse, setIsCollapse] = useState<boolean>(false);
+  let platform;
   return (
     <Box
       sx={{
@@ -53,7 +76,12 @@ const ListItem = (props: PropType) => {
               flexWrap: "wrap",
             }}
           >
-            <Typography>{translate(contact?.type)}</Typography>
+            {contact && contact.type && (
+              <SvgIcon
+                sx={{ marginBottom: "0.2em" }}
+                component={platformIcon[contact.type]}
+              />
+            )}
             <Typography> {translate("link")} : </Typography>
           </Box>
           <Typography>

@@ -1,7 +1,12 @@
 import React, { ReactElement, useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
 import { Autocomplete } from "@mui/lab";
-import { IconButton, InputAdornment, SvgIconTypeMap } from "@mui/material";
+import {
+  IconButton,
+  InputAdornment,
+  SvgIcon,
+  SvgIconTypeMap,
+} from "@mui/material";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import { OverridableComponent } from "@mui/material/OverridableComponent";
@@ -13,7 +18,7 @@ type OptionValue = string | number | readonly string[] | undefined;
 type Option<T extends OptionValue> = {
   value?: T;
   label?: string;
-  icon?: OverridableComponent<SvgIconTypeMap<{}, "svg">>;
+  icon?: React.ElementType<any>;
 };
 
 type Props<T extends OptionValue> = {
@@ -100,7 +105,7 @@ function Select<T extends OptionValue>(props: Props<T>) {
           <li value={option.value} {...props} key={`${option.value}`}>
             {option.icon && (
               <Box sx={{ marginRight: "1em" }}>
-                <option.icon />
+                <SvgIcon component={option?.icon} />
               </Box>
             )}
             {translate(option.label) || `${translate(option.value)}`}

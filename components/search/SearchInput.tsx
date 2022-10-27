@@ -2,8 +2,6 @@ import {
   FormControl,
   InputAdornment,
   TextField,
-  createStyles,
-  makeStyles,
   IconButton,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";

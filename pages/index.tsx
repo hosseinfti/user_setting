@@ -35,12 +35,12 @@ export interface contactType {
   id?: string;
   type?: string;
   link?: string;
-  icon?: OverridableComponent<SvgIconTypeMap<{}, "svg">>;
+  icon?: React.ElementType<any>;
 }
 export interface selectType {
   value: string;
   label: string;
-  icon?: OverridableComponent<SvgIconTypeMap<{}, "svg">>;
+  icon?: React.ElementType<any>;
 }
 
 export default function Home() {
