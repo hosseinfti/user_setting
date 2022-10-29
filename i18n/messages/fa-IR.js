@@ -26,5 +26,7 @@ export default {
     return: "بازگشت",
     all: "همه",
     filteredBy: "فیلتر بر اساس نوع",
+    sure_to_delete_this_item: "آیا از حذف این مورد مطمئن هستید؟",
+    submit: "تایید"
   },
 };

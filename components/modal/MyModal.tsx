@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, Button, IconButton, Modal, Typography } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import translate from "../../i18n/translate";
 
 interface Props {
   isOpen?: boolean;
@@ -23,8 +24,8 @@ const MyModal = (props: Props) => {
     showOnCloseIcon = true,
     onSubmit,
     children,
-    submitText = "submit",
-    cancelText = "cancel",
+    submitText = translate("submit"),
+    cancelText = translate("cancel"),
     disableSubmit,
     disableClose,
   } = props;
@@ -112,6 +113,7 @@ const MyModal = (props: Props) => {
           {(onSubmit || onClose) && (
             <Box
               sx={{
+                direction:"ltr",
                 display: "flex",
                 justifyContent: "flex-end",
                 borderTop:
