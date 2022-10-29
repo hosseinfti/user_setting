@@ -43,15 +43,17 @@ export interface selectType {
 
 export default function Home() {
   const context = useContext(userContext);
-  const [contacts, setContacts] = useState<Array<contactType | undefined>>();
+  const [contacts, setContacts] = useState<Array<contactType>>([]);
   const [isCollapse, setIsCollapse] = useState<boolean>(false);
   const [searchedText, setSearchedText] = useState<string | undefined>();
   const [filteredType, setFilteredType] = useState<string>("all");
 
   useEffect(() => {
-    let loadedContact = JSON.stringify(contacts);
-    if (loadedContact && loadedContact.length > 0) {
-      localStorage.setItem("contacts", loadedContact);
+    if(contacts.length > 0) {
+      let loadedContact = JSON.stringify(contacts);
+      if (loadedContact && loadedContact.length > 0) {
+        localStorage.setItem("contacts", loadedContact);
+      }
     }
   }, [contacts]);
 
@@ -59,6 +61,8 @@ export default function Home() {
     let loadedContact = localStorage.getItem("contacts");
     if (loadedContact && loadedContact.length > 0) {
       setContacts(JSON.parse(loadedContact));
+    }else {
+      setContacts([]);
     }
   }, []);
 
@@ -199,11 +203,10 @@ export default function Home() {
             isOpen={isCollapse}
             onChange={(collapseInfo) => {
               if (collapseInfo) {
+                console.log(collapseInfo)
                 collapseInfo.id = String(new Date().valueOf());
-                if (contacts) {
                   contacts.push(collapseInfo);
                   setContacts([...contacts]);
-                }
               }
             }}
           />
@@ -235,7 +238,7 @@ export default function Home() {
                       contacts.splice(index, 1);
                       setContacts([...contacts]);
                     }}
-                    onChange={(collapseInfo: contactType | undefined) => {
+                    onChange={(collapseInfo: contactType) => {
                       contacts[index] = collapseInfo;
                       setContacts([...contacts]);
                     }}
