@@ -1,10 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import {
-  Button,
-  Typography,
-  Link,
-  IconButton,
-} from "@mui/material";
+import { Button, Typography, Link, IconButton } from "@mui/material";
 import { Box, Container } from "@mui/system";
 import telegram from "@mui/icons-material/Telegram";
 import linkedIn from "@mui/icons-material/LinkedIn";
@@ -16,10 +11,17 @@ import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import ListItem from "../components/ListItem";
 import translate from "../i18n/translate";
-import { userContext } from "./_app";
 import MyCollapse from "../components/collapse/MyCollapse";
 import SearchInput from "../components/search/SearchInput";
 import Tab from "../components/tab/Tab";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  localeActions,
+  LocaleStateType,
+  localStringsType,
+  themeActions,
+  ThemeStateType,
+} from "../store/store";
 
 export const platforms: selectType[] = [
   { value: "twitter", label: "twitter", icon: twitter },
@@ -42,14 +44,17 @@ export interface selectType {
 }
 
 export default function Home() {
-  const context = useContext(userContext);
   const [contacts, setContacts] = useState<Array<contactType>>([]);
   const [isCollapse, setIsCollapse] = useState<boolean>(false);
   const [searchedText, setSearchedText] = useState<string | undefined>();
   const [filteredType, setFilteredType] = useState<string>("all");
 
+  const dispatch = useDispatch();
+  const locale = useSelector((state: LocaleStateType) => state.locale);
+  const theme = useSelector((state: ThemeStateType) => state.theme);
+
   useEffect(() => {
-    if(contacts.length > 0) {
+    if (contacts.length > 0) {
       let loadedContact = JSON.stringify(contacts);
       if (loadedContact && loadedContact.length > 0) {
         localStorage.setItem("contacts", loadedContact);
@@ -61,10 +66,15 @@ export default function Home() {
     let loadedContact = localStorage.getItem("contacts");
     if (loadedContact && loadedContact.length > 0) {
       setContacts(JSON.parse(loadedContact));
-    }else {
+    } else {
       setContacts([]);
     }
   }, []);
+
+  const localeHandler = (e: localStringsType) => {
+    dispatch(localeActions.setLocale(e));
+    localStorage.setItem("lang", e);
+  };
 
   return (
     <Container fixed sx={{ display: "flex", justifyContent: "center" }}>
@@ -112,27 +122,27 @@ export default function Home() {
             >
               <Button
                 onClick={() => {
-                  context?.setLocale("fa-ir");
+                  localeHandler("fa-ir");
                   document.body.style.direction = "rtl";
                 }}
-                variant={context?.locale === "fa-ir" ? "contained" : "outlined"}
+                variant={locale === "fa-ir" ? "contained" : "outlined"}
               >
                 فارسی
               </Button>
               <Button
                 onClick={() => {
-                  context?.setLocale("en-us");
+                  localeHandler("en-us");
                   document.body.style.direction = "ltr";
                 }}
-                variant={context?.locale === "en-us" ? "contained" : "outlined"}
+                variant={locale === "en-us" ? "contained" : "outlined"}
               >
                 English
               </Button>
-              {context?.theme === "dark" ? (
+              {theme === "dark" ? (
                 <IconButton>
                   <DarkModeOutlinedIcon
                     onClick={() => {
-                      context?.setTheme("light");
+                      dispatch(themeActions.setTheme("light"));
                     }}
                   />
                 </IconButton>
@@ -140,7 +150,7 @@ export default function Home() {
                 <IconButton sx={{ color: "#000000" }}>
                   <LightModeIcon
                     onClick={() => {
-                      context?.setTheme("dark");
+                      dispatch(themeActions.setTheme("dark"));
                     }}
                   />
                 </IconButton>
@@ -203,10 +213,10 @@ export default function Home() {
             isOpen={isCollapse}
             onChange={(collapseInfo) => {
               if (collapseInfo) {
-                console.log(collapseInfo)
+                console.log(collapseInfo);
                 collapseInfo.id = String(new Date().valueOf());
-                  contacts.push(collapseInfo);
-                  setContacts([...contacts]);
+                contacts.push(collapseInfo);
+                setContacts([...contacts]);
               }
             }}
           />

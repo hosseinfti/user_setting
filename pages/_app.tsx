@@ -1,23 +1,25 @@
 import "../styles/globals.css";
 import { ThemeProvider } from "@mui/material";
 import { darkTheme, lightTheme } from "../utils/theme";
-import {createEmotionCache ,createEmotionCacheLtr } from "../utils/createEmotionCache";
+import {
+  createEmotionCache,
+  createEmotionCacheLtr,
+} from "../utils/createEmotionCache";
 import { CacheProvider } from "@emotion/react";
 import CssBaseline from "@mui/material/CssBaseline";
 import { I18nProvider, LOCALES } from "../i18n";
-import React, { useEffect, useState, createContext } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector, Provider } from "react-redux";
+import store, {
+  localeActions,
+  LocaleStateType,
+  ThemeStateType,
+} from "../store/store";
 
-const clientSideEmotionCacheRtl = createEmotionCache() ;
-const clientSideEmotionCacheLtr = createEmotionCacheLtr() ;
+const clientSideEmotionCacheRtl = createEmotionCache();
+const clientSideEmotionCacheLtr = createEmotionCacheLtr();
 
 const myTheme: any = { dark: darkTheme, light: lightTheme };
-export interface AppContextInterface {
-  locale: string;
-  setLocale: (e: string) => void;
-  theme: any;
-  setTheme: (e: string) => void;
-}
-export const userContext = createContext<AppContextInterface | null>(null);
 
 interface Props {
   Component: any;
@@ -26,50 +28,36 @@ interface Props {
 }
 
 function MyApp(props: Props) {
-  const { Component, emotionCache , pageProps } = props;
-  const [locale, setLocale] = useState<string>(LOCALES.PERSIAN);
-  const [theme, setTheme] = useState<string>("dark");
+  const { Component, emotionCache, pageProps } = props;
+
+  const locale = useSelector((state: LocaleStateType) => state.locale);
+  const theme = useSelector((state: ThemeStateType) => state.theme);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     let currentLang = localStorage.getItem("lang");
     if (currentLang) {
-      setLocale(currentLang);
+      dispatch(localeActions.setLocale(currentLang));
     }
   }, []);
 
-  useEffect(() => {
-    locale && locale !== null && localStorage.setItem("lang", locale);
-  }, [locale]);
-
-  const handleLocale = (e: string) => {
-    setLocale(e);
-  };
-  const handleTheme = (e: string) => {
-    setTheme(e);
-  };
-
   return (
-    <CacheProvider value={ locale === "fa-ir"  ? clientSideEmotionCacheRtl : clientSideEmotionCacheLtr}>
-      <ThemeProvider theme={myTheme[theme]}>
-        <CssBaseline />
-        <I18nProvider locale={locale}>
-          <userContext.Provider
-            value={{
-              locale,
-              setLocale: (e) => {
-                handleLocale(e);
-              },
-              theme,
-              setTheme: (e) => {
-                handleTheme(e);
-              },
-            }}
-          >
+    <Provider store={store}>
+      <CacheProvider
+        value={
+          locale === "fa-ir"
+            ? clientSideEmotionCacheRtl
+            : clientSideEmotionCacheLtr
+        }
+      >
+        <ThemeProvider theme={myTheme[theme]}>
+          <CssBaseline />
+          <I18nProvider locale={locale}>
             <Component {...pageProps} />
-          </userContext.Provider>
-        </I18nProvider>
-      </ThemeProvider>
-    </CacheProvider>
+          </I18nProvider>
+        </ThemeProvider>
+      </CacheProvider>
+    </Provider>
   );
 }
 

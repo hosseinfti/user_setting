@@ -115,9 +115,8 @@ const ListItem = (props: PropType) => {
                 </Typography>
               </Button>
             }
-            description={ <Typography>
-{translate("sure_to_delete_this_item")}
-            </Typography>
+            description={
+              <Typography>{translate("sure_to_delete_this_item")}</Typography>
             }
           />
         </Box>
