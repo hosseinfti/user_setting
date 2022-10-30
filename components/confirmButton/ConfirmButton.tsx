@@ -5,7 +5,7 @@ import { Button, Typography } from "@mui/material";
 interface Props {
   onSubmit: () => void;
   title?: string;
-  description?: string;
+  description?: ReactNode;
   Render?: any;
 }
 
@@ -46,7 +46,7 @@ const ConfirmButton = ({ Render, onSubmit, description, title }: Props) => {
         onSubmit={handleSubmit}
         title={title}
       >
-        <Typography>{description}</Typography>
+        {description}
       </MyModal>
       {Render && (
         <div

@@ -27,5 +27,7 @@ export default {
     return: "Return",
     all: "all",
     filteredBy: "Filter By",
+    sure_to_delete_this_item: "Are you sure to delete this item?",
+    submit: "Submit",
   },
 };

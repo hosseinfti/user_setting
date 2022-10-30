@@ -1,13 +1,14 @@
 import "../styles/globals.css";
 import { ThemeProvider } from "@mui/material";
 import { darkTheme, lightTheme } from "../utils/theme";
-import createEmotionCache from "../utils/createEmotionCache";
+import {createEmotionCache ,createEmotionCacheLtr } from "../utils/createEmotionCache";
 import { CacheProvider } from "@emotion/react";
 import CssBaseline from "@mui/material/CssBaseline";
 import { I18nProvider, LOCALES } from "../i18n";
 import React, { useEffect, useState, createContext } from "react";
 
-const clientSideEmotionCache = createEmotionCache();
+const clientSideEmotionCacheRtl = createEmotionCache() ;
+const clientSideEmotionCacheLtr = createEmotionCacheLtr() ;
 
 const myTheme: any = { dark: darkTheme, light: lightTheme };
 export interface AppContextInterface {
@@ -25,7 +26,7 @@ interface Props {
 }
 
 function MyApp(props: Props) {
-  const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
+  const { Component, emotionCache , pageProps } = props;
   const [locale, setLocale] = useState<string>(LOCALES.PERSIAN);
   const [theme, setTheme] = useState<string>("dark");
 
@@ -48,7 +49,7 @@ function MyApp(props: Props) {
   };
 
   return (
-    <CacheProvider value={emotionCache}>
+    <CacheProvider value={ locale === "fa-ir"  ? clientSideEmotionCacheRtl : clientSideEmotionCacheLtr}>
       <ThemeProvider theme={myTheme[theme]}>
         <CssBaseline />
         <I18nProvider locale={locale}>
