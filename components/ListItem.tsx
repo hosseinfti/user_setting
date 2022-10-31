@@ -1,6 +1,6 @@
 import { Box, Button, Link, SvgIcon, Typography } from "@mui/material";
 import React, { useState } from "react";
-import { contactType, platforms, selectType } from "../pages";
+import { contactType } from "../pages";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import ConfirmButton from "./confirmButton/ConfirmButton";

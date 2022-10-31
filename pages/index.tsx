@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Typography, Link, IconButton } from "@mui/material";
 import { Box, Container } from "@mui/system";
 import telegram from "@mui/icons-material/Telegram";
@@ -14,14 +14,16 @@ import translate from "../i18n/translate";
 import MyCollapse from "../components/collapse/MyCollapse";
 import SearchInput from "../components/search/SearchInput";
 import Tab from "../components/tab/Tab";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
   localeActions,
   LocaleStateType,
   localStringsType,
+  storeType,
   themeActions,
   ThemeStateType,
 } from "../store/store";
+import { useAppSelector } from "../store/MyProvider";
 
 export const platforms: selectType[] = [
   { value: "twitter", label: "twitter", icon: twitter },
@@ -50,8 +52,8 @@ export default function Home() {
   const [filteredType, setFilteredType] = useState<string>("all");
 
   const dispatch = useDispatch();
-  const locale = useSelector((state: LocaleStateType) => state.locale);
-  const theme = useSelector((state: ThemeStateType) => state.theme);
+  const locale = useAppSelector((state: storeType) => state.locale);
+  const theme = useAppSelector((state: storeType) => state.theme);
 
   useEffect(() => {
     if (contacts.length > 0) {
@@ -61,6 +63,13 @@ export default function Home() {
       }
     }
   }, [contacts]);
+
+  useEffect(() => {
+    let currentLang = localStorage.getItem("lang");
+    if (currentLang) {
+      dispatch(localeActions.setLocale(currentLang));
+    }
+  }, []);
 
   useEffect(() => {
     let loadedContact = localStorage.getItem("contacts");
