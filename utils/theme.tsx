@@ -41,7 +41,7 @@ export const darkTheme = createTheme({
 });
 export const lightTheme = createTheme({
   palette: {
-    mode: "dark",
+    mode: "light",
     common: {
       black: "#000000",
       white: "#ffffff",

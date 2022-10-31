@@ -5,9 +5,7 @@ import MyProvider from "../store/MyProvider";
 function MyApp() {
   return (
     <Provider store={store}>
-      <div>
-        <MyProvider />
-      </div>
+      <MyProvider />
     </Provider>
   );
 }
