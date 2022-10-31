@@ -17,11 +17,9 @@ import Tab from "../components/tab/Tab";
 import { useDispatch } from "react-redux";
 import {
   localeActions,
-  LocaleStateType,
   localStringsType,
   storeType,
   themeActions,
-  ThemeStateType,
 } from "../store/store";
 import { useAppSelector } from "../store/MyProvider";
 
@@ -68,6 +66,7 @@ export default function Home() {
     let currentLang = localStorage.getItem("lang");
     if (currentLang) {
       dispatch(localeActions.setLocale(currentLang));
+      document.body.style.direction = currentLang === "fa-ir" ? "rtl" : "ltr";
     }
   }, []);
 
@@ -77,6 +76,10 @@ export default function Home() {
       setContacts(JSON.parse(loadedContact));
     } else {
       setContacts([]);
+    }
+    let lastTheme = localStorage.getItem("theme");
+    if (lastTheme) {
+      dispatch(themeActions.setTheme(lastTheme));
     }
   }, []);
 
@@ -134,7 +137,7 @@ export default function Home() {
                   localeHandler("fa-ir");
                   document.body.style.direction = "rtl";
                 }}
-                variant={locale === "fa-ir" ? "contained" : "outlined"}
+                variant={locale.locale === "fa-ir" ? "contained" : "outlined"}
               >
                 فارسی
               </Button>
@@ -143,15 +146,16 @@ export default function Home() {
                   localeHandler("en-us");
                   document.body.style.direction = "ltr";
                 }}
-                variant={locale === "en-us" ? "contained" : "outlined"}
+                variant={locale.locale === "en-us" ? "contained" : "outlined"}
               >
                 English
               </Button>
-              {theme === "dark" ? (
+              {theme.theme === "dark" ? (
                 <IconButton>
                   <DarkModeOutlinedIcon
                     onClick={() => {
                       dispatch(themeActions.setTheme("light"));
+                      localStorage.setItem("theme", "light");
                     }}
                   />
                 </IconButton>
@@ -160,6 +164,7 @@ export default function Home() {
                   <LightModeIcon
                     onClick={() => {
                       dispatch(themeActions.setTheme("dark"));
+                      localStorage.setItem("theme", "dark");
                     }}
                   />
                 </IconButton>

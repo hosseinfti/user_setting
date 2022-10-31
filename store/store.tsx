@@ -4,8 +4,8 @@ export type localStringsType = "fa-ir" | "en-us";
 export type themeStringsType = "light" | "dark";
 
 export interface storeType {
-  locale: localStringsType;
-  theme: themeStringsType;
+  locale: LocaleStateType;
+  theme: ThemeStateType;
 }
 
 export interface LocaleStateType {
@@ -44,7 +44,6 @@ const themeSlice = createSlice({
 const store = configureStore({
   reducer: { locale: localeSlice.reducer, theme: themeSlice.reducer },
 });
-
 
 export const localeActions = localeSlice.actions;
 export const themeActions = themeSlice.actions;

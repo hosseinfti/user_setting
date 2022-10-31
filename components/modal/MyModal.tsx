@@ -113,7 +113,7 @@ const MyModal = (props: Props) => {
           {(onSubmit || onClose) && (
             <Box
               sx={{
-                direction:"ltr",
+                direction: "ltr",
                 display: "flex",
                 justifyContent: "flex-end",
                 borderTop:
