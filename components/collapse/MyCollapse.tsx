@@ -1,10 +1,10 @@
 import { Button, Collapse, TextField } from "@mui/material";
 import { Box } from "@mui/system";
 import MySelect from "../select/MySelect";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { contactType, platforms } from "../../pages";
 import translate from "../../i18n/translate";
-import { LocaleStateType, storeType } from "../../store/store";
+import { storeType } from "../../store/store";
 import { useAppSelector } from "../../store/MyProvider";
 
 interface Props {
@@ -12,17 +12,30 @@ interface Props {
   isOpen: boolean;
   setIsOpen: (bool: boolean) => void;
   onChange: (data: contactType | undefined) => void;
+  allData?: contactType[];
 }
 
 const MyCollapse = (props: Props) => {
-  const { isOpen, setIsOpen, onChange, defaultData } = props;
+  const { isOpen, setIsOpen, onChange, defaultData, allData } = props;
   const [collapseInfo, setCollapseInfo] = useState<contactType | undefined>(
     defaultData
   );
   const [valid, setValid] = useState<boolean>(false);
+  const [isExist, setIsExist] = useState<boolean>(false);
   const locale = useAppSelector((state: storeType) => state.locale);
-
   const textFiledRef = useRef(null);
+
+  const myHelperText = () => {
+    if (textFiledRef.current) {
+      if (isExist) {
+        return translate("cant_be_Repetitious");
+      } else {
+        return translate("should_url");
+      }
+    } else {
+      return translate("required_field");
+    }
+  };
   const handleValidate = (e: any) => {
     const reg = new RegExp(`(www|http:|https:)+[^\s]+[\w]`);
     setValid(reg.test(e.target.value));
@@ -36,6 +49,22 @@ const MyCollapse = (props: Props) => {
       }, 1000);
     }
   };
+
+  useEffect(() => {
+    if (allData) {
+      let Index = allData.findIndex((_data) => {
+        return (
+          _data?.link === collapseInfo?.link &&
+          _data?.type === collapseInfo?.type
+        );
+      });
+      if (Index > 0) {
+        setIsExist(true);
+      } else {
+        setIsExist(false);
+      }
+    }
+  }, [collapseInfo, allData]);
 
   return (
     <Collapse in={isOpen} timeout="auto" unmountOnExit>
@@ -85,18 +114,14 @@ const MyCollapse = (props: Props) => {
             sx={{ flex: { sm: 3 }, direction: "rtl" }}
             label={translate("link")}
             required
-            error={!valid}
-            helperText={
-              textFiledRef.current
-                ? translate("should_url")
-                : translate("required_field")
-            }
+            error={!valid || isExist}
+            helperText={myHelperText()}
           />
         </Box>
         <Box
           sx={{
             display: "flex",
-            justifyContent: locale === "fa-ir" ? "end" : "start",
+            justifyContent: locale.locale === "fa-ir" ? "end" : "start",
             marginTop: "1em",
             gap: "0.5em",
           }}
@@ -115,7 +140,9 @@ const MyCollapse = (props: Props) => {
               onChange(collapseInfo);
               handleCollapse(false);
             }}
-            disabled={!collapseInfo?.type || !collapseInfo?.link || !valid}
+            disabled={
+              !collapseInfo?.type || !collapseInfo?.link || !valid || isExist
+            }
             variant="contained"
           >
             {translate("submit_contact")}

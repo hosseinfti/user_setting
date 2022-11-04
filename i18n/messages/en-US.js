@@ -29,5 +29,6 @@ export default {
     filteredBy: "Filter By",
     sure_to_delete_this_item: "Are you sure to delete this item?",
     submit: "Submit",
+    cant_be_Repetitious: "The communication path cannot be repeated",
   },
 };

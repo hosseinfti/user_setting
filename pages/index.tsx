@@ -233,6 +233,7 @@ export default function Home() {
                 setContacts([...contacts]);
               }
             }}
+            allData={contacts}
           />
           {contacts &&
             contacts
@@ -257,6 +258,7 @@ export default function Home() {
                 return (
                   <ListItem
                     key={index}
+                    allContact={contacts}
                     contact={contact}
                     onDelete={() => {
                       contacts.splice(index, 1);

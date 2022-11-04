@@ -26,10 +26,11 @@ interface PropType {
   contact: contactType | undefined;
   onDelete: () => void;
   onChange: (collapseInfo: contactType | undefined) => void;
+  allContact?: contactType[] | undefined;
 }
 
 const ListItem = (props: PropType) => {
-  const { contact, onDelete, onChange } = props;
+  const { contact, allContact, onDelete, onChange } = props;
   const [isCollapse, setIsCollapse] = useState<boolean>(false);
   return (
     <Box
@@ -134,6 +135,7 @@ const ListItem = (props: PropType) => {
               setIsCollapse(false);
             }
           }}
+          allData={allContact}
         />
       }
     </Box>

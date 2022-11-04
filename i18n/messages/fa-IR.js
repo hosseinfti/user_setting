@@ -27,6 +27,7 @@ export default {
     all: "همه",
     filteredBy: "فیلتر بر اساس نوع",
     sure_to_delete_this_item: "آیا از حذف این مورد مطمئن هستید؟",
-    submit: "تایید"
+    submit: "تایید",
+    cant_be_Repetitious:"مسیر ارتباطی نمی‌تواند تکراری باشد"
   },
 };
